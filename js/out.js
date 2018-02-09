@@ -9382,7 +9382,13 @@ var _reactDom = __webpack_require__(92);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
+var _data = __webpack_require__(178);
+
+var _data2 = _interopRequireDefault(_data);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -9399,11 +9405,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
             var _this = _possibleConstructorReturn(this, (TypeWriter.__proto__ || Object.getPrototypeOf(TypeWriter)).call(this, props));
 
-            _this.counter = 1;
+            _this.counter = 0;
+
             _this.state = {
-                text1: "P",
-                text2: _this.props.courses
+                text1: _this.props.msgFirst[0],
+                text2: " ",
+                index: _this.props.index,
+                next: _this.props.nextSent
             };
+
             return _this;
         }
 
@@ -9412,40 +9422,71 @@ document.addEventListener("DOMContentLoaded", function () {
             value: function componentDidMount() {
                 var _this2 = this;
 
-                this.interval = setInterval(function () {
-                    var firstArr = _this2.props.firstPar.split("");
-                    console.log(firstArr);
-                    _this2.setState({
-                        text1: firstArr[_this2.counter++]
-                    });
-                    clearInterval(_this2.interval);
-                }, 1000);
+                var sentence = '';
+                var letters = '';
+                //pojawienie się pierwszego paragrafu w interwałach
+                this.intervalFirst = setInterval(function () {
+                    _this2.counter++;
+                    if (_this2.counter < _this2.props.msgFirst.length) {
+                        _this2.setState({
+                            text1: _this2.state.text1 + _this2.props.msgFirst[_this2.counter]
+                        });
+                    }
+                }, this.props.interval);
+
+                //opóźnienie pojawienia się drugiego paragrafu w interwałach
+                this.time = setTimeout(function () {
+                    _this2.intervalSec = setInterval(function () {
+                        sentence = [].concat(_toConsumableArray(_this2.props.msgSec[_this2.state.index]));
+                        letters += [].concat(_toConsumableArray(sentence[letters.length]));
+                        if (_this2.state.next === false || letters.length < sentence.length) {
+                            _this2.setState({
+                                text2: letters
+
+                            });
+                        }
+                        if (letters.length === sentence.length || _this2.state.next === true) {
+                            _this2.setState({
+                                text2: '',
+                                index: _this2.state.index + 1
+
+                            });
+                        }
+                    }, _this2.props.interval);
+                    console.log(_this2.state.index);
+                }, this.props.interval * this.props.msgFirst.length);
+            }
+        }, {
+            key: 'componentWillUnmount',
+            value: function componentWillUnmount() {
+                clearInterval(this.intervalFirst);
+                clearInterval(this.intervalSec);
             }
         }, {
             key: 'render',
             value: function render() {
                 return _react2.default.createElement(
                     'div',
-                    null,
+                    { className: 'main-banner' },
                     _react2.default.createElement(
                         'p',
-                        null,
-                        this.state.text1
-                    ),
-                    _react2.default.createElement(
-                        'span',
-                        { style: { display: 'inline' } },
-                        ' | '
+                        { className: 'main-banner__text' },
+                        this.state.text1,
+                        _react2.default.createElement(
+                            'span',
+                            { className: 'main-banner__text--span' },
+                            ' | '
+                        )
                     ),
                     _react2.default.createElement(
                         'p',
-                        null,
-                        this.state.text2
-                    ),
-                    _react2.default.createElement(
-                        'span',
-                        null,
-                        ' | '
+                        { className: 'main-banner__text' },
+                        this.state.text2,
+                        _react2.default.createElement(
+                            'span',
+                            { className: 'main-banner__text--span' },
+                            ' | '
+                        )
                     )
                 );
             }
@@ -9468,8 +9509,7 @@ document.addEventListener("DOMContentLoaded", function () {
         _createClass(App, [{
             key: 'render',
             value: function render() {
-                var coursesArray = ["Zacznij karierę w IT. ", "Naucz się programować. ", "Zostań programistą. ", "Zostań programistą Java. ", "Zostań programistą .NET. ", "Zostań Progrmista Ruby. ", "Zostań programistą Python. ", "Zostań Front-End Developerem. "];
-                return _react2.default.createElement(TypeWriter, { courses: coursesArray, firstPar: "Pierwszy kod do sukcesu. " });
+                return _react2.default.createElement(TypeWriter, { counter: 0, msgSec: _data2.default, msgFirst: "Pierwszy kod do sukcesu. ", index: 0, interval: 200, nextSent: false });
             }
         }]);
 
@@ -21707,6 +21747,25 @@ var ReactDOMInvalidARIAHook = {
 
 module.exports = ReactDOMInvalidARIAHook;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 178 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+const messages = [
+    "Zacznij karierę w IT. ",
+    "Naucz się programować. ",
+    "Zostań programistą. ",
+    "Zostań programistą Java. ",
+    "Zostań programistą .NET. ",
+    "Zostań Programista Ruby. ",
+    "Zostań programistą Python. ",
+    "Zostań Front-End Developerem. "
+]
+
+/* harmony default export */ __webpack_exports__["default"] = (messages);
 
 /***/ })
 /******/ ]);

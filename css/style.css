@@ -1,0 +1,32 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.main-banner {
+
+    margin: 50px;
+}
+
+.main-banner__text{
+    font-size: 40px;
+    font-weight: 600;
+    width: max-content;
+    text-align: left;
+    color: #33315a;;
+    font-family: 'Raleway', sans-serif;
+}
+
+.main-banner__text--span {
+    display: inline;
+    font-size: 50px;
+    color: yellow;
+    animation: bulb 0.9s linear infinite
+}
+
+@keyframes bulb {
+    0%{opacity: 0;}
+    100%{opacity: 1;}
+}
