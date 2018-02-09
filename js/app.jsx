@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     class App extends React.Component {
         render(){
-            return <TypeWriter msgFirst={"Pierwszy kod do sukcesu. "} msgSec={messages} interval={200} spanUp={"inline"} spanBottom={"none"}/>;
+            return <TypeWriter msgFirst={"Pierwszy kod do sukcesu "} msgSec={messages} interval={200} spanUp={"inline"} spanBottom={"none"}/>;
             
         }
     }

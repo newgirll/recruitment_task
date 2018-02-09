@@ -1,11 +1,11 @@
 const messages = [
     "Zacznij karierę w IT. ",
     "Naucz się programować. ",
-    "Zostań programistą. ",
-    "Zostań programistą Java. ",
-    "Zostań programistą .NET. ",
-    "Zostań Programista Ruby. ",
-    "Zostań programistą Python. ",
+    "Zostań Programistą. ",
+    "Zostań Programistą Java. ",
+    "Zostań Programistą .NET. ",
+    "Zostań Programistą Ruby. ",
+    "Zostań Programistą Python. ",
     "Zostań Front-End Developerem. "
 ]
 

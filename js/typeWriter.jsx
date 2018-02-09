@@ -7,7 +7,6 @@ class TypeWriter extends React.Component {
         this.state = {
             text1: this.props.msgFirst[0], // pierwsza litera ze zdania z pierwszego paragrafu
             text2: " ",
-            index: this.props.index,
             span1: this.props.spanUp,
             span2: this.props.spanBottom
         }
@@ -17,7 +16,6 @@ class TypeWriter extends React.Component {
     componentDidMount(){
 
         let counter = 0;
-
         //pojawienie się pierwszego paragrafu w interwałach
         this.intervalFirst = setInterval(()=>{
             counter ++;
@@ -28,10 +26,11 @@ class TypeWriter extends React.Component {
             }
             if(counter == this.props.msgFirst.length){
                 this.setState({
-                    span1: "none",
                     span2: "inline"
-
                 })
+            }
+            if(this.props.msgFirst.length === this.state.text1.length ){
+                clearInterval(this.intervalFirst);
             }
 
         }, this.props.interval)
@@ -42,29 +41,28 @@ class TypeWriter extends React.Component {
             let letters = ''; // przechowywane poszczególne litery z danego zdania
             let index = 0;
             this.intervalSec = setInterval(()=>{
-                sentence = [...this.props.msgSec[index]]
+                sentence = this.props.msgSec[index]
                 letters += [...sentence[letters.length]]
                 if( letters.length < sentence.length){
                     this.setState({
                         text2: letters,
-                        span: "inline"
+                        span2: "inline",
+                        span1: "none"
                     })
-                } else { // gdy długość literek zrówna się z długością zdania to pokazać kolejne zdanie (nie działa)
-                    index++
+                } else { // gdy długość literek zrówna się z długością zdania to pokazać kolejne zdanie
+                    index ++;
+                    letters = '';
                 }
-                
+                if(this.props.msgSec[length-1] === sentence ){
+                    clearInterval(this.intervalSec);
+                }
             }, this.props.interval)
-          
+
         },this.props.interval * this.props.msgFirst.length )
 
     }
    
     
-
-    componentWillUnmount(){
-        clearInterval(this.intervalFirst);
-        clearInterval(this.intervalSec)
-    }
     render(){
         const styleSpanUp = {display: this.state.span1}
         const styleSpanBottom = {display: this.state.span2}

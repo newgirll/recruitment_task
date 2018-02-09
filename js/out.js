@@ -9432,7 +9432,7 @@ document.addEventListener("DOMContentLoaded", function () {
         _createClass(App, [{
             key: 'render',
             value: function render() {
-                return _react2.default.createElement(_typeWriter2.default, { counter: 0, msgSec: _data2.default, msgFirst: "Pierwszy kod do sukcesu. ", index: 0, interval: 200, spanUp: "inline", spanBottom: "none" });
+                return _react2.default.createElement(_typeWriter2.default, { msgFirst: "Pierwszy kod do sukcesu ", msgSec: _data2.default, interval: 200, spanUp: "inline", spanBottom: "none" });
             }
         }]);
 
@@ -21660,11 +21660,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 const messages = [
     "Zacznij karierę w IT. ",
     "Naucz się programować. ",
-    "Zostań programistą. ",
-    "Zostań programistą Java. ",
-    "Zostań programistą .NET. ",
-    "Zostań Programista Ruby. ",
-    "Zostań programistą Python. ",
+    "Zostań Programistą. ",
+    "Zostań Programistą Java. ",
+    "Zostań Programistą .NET. ",
+    "Zostań Programistą Ruby. ",
+    "Zostań Programistą Python. ",
     "Zostań Front-End Developerem. "
 ]
 
@@ -21712,7 +21712,6 @@ var TypeWriter = function (_React$Component) {
         _this.state = {
             text1: _this.props.msgFirst[0], // pierwsza litera ze zdania z pierwszego paragrafu
             text2: " ",
-            index: _this.props.index,
             span1: _this.props.spanUp,
             span2: _this.props.spanBottom
         };
@@ -21726,7 +21725,6 @@ var TypeWriter = function (_React$Component) {
             var _this2 = this;
 
             var counter = 0;
-
             //pojawienie się pierwszego paragrafu w interwałach
             this.intervalFirst = setInterval(function () {
                 counter++;
@@ -21737,10 +21735,11 @@ var TypeWriter = function (_React$Component) {
                 }
                 if (counter == _this2.props.msgFirst.length) {
                     _this2.setState({
-                        span1: "none",
                         span2: "inline"
-
                     });
+                }
+                if (_this2.props.msgFirst.length === _this2.state.text1.length) {
+                    clearInterval(_this2.intervalFirst);
                 }
             }, this.props.interval);
 
@@ -21750,25 +21749,24 @@ var TypeWriter = function (_React$Component) {
                 var letters = ''; // przechowywane poszczególne litery z danego zdania
                 var index = 0;
                 _this2.intervalSec = setInterval(function () {
-                    sentence = [].concat(_toConsumableArray(_this2.props.msgSec[index]));
+                    sentence = _this2.props.msgSec[index];
                     letters += [].concat(_toConsumableArray(sentence[letters.length]));
                     if (letters.length < sentence.length) {
                         _this2.setState({
                             text2: letters,
-                            span: "inline"
+                            span2: "inline",
+                            span1: "none"
                         });
                     } else {
-                        // gdy długość literek zrówna się z długością zdania to pokazać kolejne zdanie (nie działa)
+                        // gdy długość literek zrówna się z długością zdania to pokazać kolejne zdanie
                         index++;
+                        letters = '';
+                    }
+                    if (_this2.props.msgSec[length - 1] === sentence) {
+                        clearInterval(_this2.intervalSec);
                     }
                 }, _this2.props.interval);
             }, this.props.interval * this.props.msgFirst.length);
-        }
-    }, {
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            clearInterval(this.intervalFirst);
-            clearInterval(this.intervalSec);
         }
     }, {
         key: 'render',
