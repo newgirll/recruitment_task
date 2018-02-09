@@ -9416,7 +9416,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // tu jest przechowywana tablica ze zdaniami
+
 
 document.addEventListener("DOMContentLoaded", function () {
     var App = function (_React$Component) {
@@ -9431,7 +9432,7 @@ document.addEventListener("DOMContentLoaded", function () {
         _createClass(App, [{
             key: 'render',
             value: function render() {
-                return _react2.default.createElement(_typeWriter2.default, { counter: 0, msgSec: _data2.default, msgFirst: "Pierwszy kod do sukcesu. ", index: 0, interval: 200 });
+                return _react2.default.createElement(_typeWriter2.default, { counter: 0, msgSec: _data2.default, msgFirst: "Pierwszy kod do sukcesu. ", index: 0, interval: 200, spanUp: "inline", spanBottom: "none" });
             }
         }]);
 
@@ -21708,12 +21709,12 @@ var TypeWriter = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (TypeWriter.__proto__ || Object.getPrototypeOf(TypeWriter)).call(this, props));
 
-        _this.counter = 0;
-
         _this.state = {
-            text1: _this.props.msgFirst[0],
+            text1: _this.props.msgFirst[0], // pierwsza litera ze zdania z pierwszego paragrafu
             text2: " ",
-            index: _this.props.index
+            index: _this.props.index,
+            span1: _this.props.spanUp,
+            span2: _this.props.spanBottom
         };
 
         return _this;
@@ -21724,38 +21725,43 @@ var TypeWriter = function (_React$Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            var sentence = '';
-            var letters = '';
+            var counter = 0;
+
             //pojawienie się pierwszego paragrafu w interwałach
             this.intervalFirst = setInterval(function () {
-                _this2.counter++;
-                if (_this2.counter < _this2.props.msgFirst.length) {
+                counter++;
+                if (counter < _this2.props.msgFirst.length) {
                     _this2.setState({
-                        text1: _this2.state.text1 + _this2.props.msgFirst[_this2.counter]
+                        text1: _this2.state.text1 + _this2.props.msgFirst[counter]
+                    });
+                }
+                if (counter == _this2.props.msgFirst.length) {
+                    _this2.setState({
+                        span1: "none",
+                        span2: "inline"
+
                     });
                 }
             }, this.props.interval);
 
             //opóźnienie pojawienia się drugiego paragrafu w interwałach
             this.time = setTimeout(function () {
+                var sentence = ''; // przechowywane poszczególne zdania
+                var letters = ''; // przechowywane poszczególne litery z danego zdania
+                var index = 0;
                 _this2.intervalSec = setInterval(function () {
-                    sentence = [].concat(_toConsumableArray(_this2.props.msgSec[_this2.state.index]));
+                    sentence = [].concat(_toConsumableArray(_this2.props.msgSec[index]));
                     letters += [].concat(_toConsumableArray(sentence[letters.length]));
-                    if (_this2.state.next === false || letters.length < sentence.length) {
+                    if (letters.length < sentence.length) {
                         _this2.setState({
-                            text2: letters
-
+                            text2: letters,
+                            span: "inline"
                         });
-                    }
-                    if (letters.length === sentence.length || _this2.state.next === true) {
-                        _this2.setState({
-                            text2: '',
-                            index: _this2.state.index + 1
-
-                        });
+                    } else {
+                        // gdy długość literek zrówna się z długością zdania to pokazać kolejne zdanie (nie działa)
+                        index++;
                     }
                 }, _this2.props.interval);
-                console.log(_this2.state.index);
             }, this.props.interval * this.props.msgFirst.length);
         }
     }, {
@@ -21767,6 +21773,8 @@ var TypeWriter = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
+            var styleSpanUp = { display: this.state.span1 };
+            var styleSpanBottom = { display: this.state.span2 };
             return _react2.default.createElement(
                 'div',
                 { className: 'main-banner' },
@@ -21776,7 +21784,7 @@ var TypeWriter = function (_React$Component) {
                     this.state.text1,
                     _react2.default.createElement(
                         'span',
-                        { className: 'main-banner__text--span' },
+                        { style: styleSpanUp, className: 'main-banner__text--span' },
                         ' | '
                     )
                 ),
@@ -21786,7 +21794,7 @@ var TypeWriter = function (_React$Component) {
                     this.state.text2,
                     _react2.default.createElement(
                         'span',
-                        { className: 'main-banner__text--span' },
+                        { style: styleSpanBottom, className: 'main-banner__text--span' },
                         ' | '
                     )
                 )
